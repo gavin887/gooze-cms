@@ -1,4 +1,6 @@
 export * from './auth';
+export * from './content/category';
+export * from './content/tag';
 export * from './material/material';
 export * from './system/api';
 export * from './system/dict';

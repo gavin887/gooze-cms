@@ -37,6 +37,8 @@ func InitRouter() *gin.Engine {
 		InitRecordAuthRouter(privateAuthGroup)
 		InitRoleAuthRouter(privateAuthGroup)
 		InitUserAuthRouter(privateAuthGroup)
+		InitCategoryAuthRouter(privateAuthGroup)
+		InitTagAuthRouter(privateAuthGroup)
 	}
 
 	return r

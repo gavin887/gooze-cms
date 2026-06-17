@@ -1,0 +1,65 @@
+# --------------------------- 分类管理 ---------------------------
+type CategoryListReq {
+    Page int64 `json:"page" form:"page"`
+    PageSize int64 `json:"pageSize" form:"pageSize"`
+    Name string `json:"name" form:"name"`
+    Status int64 `json:"status" form:"status"`
+}
+
+type UpsertCategoryReq {
+    Name string `json:"name"`
+    Icon string `json:"icon"`
+    Sort int64 `json:"sort"`
+    Status int64 `json:"status"`
+    ParentId int64 `json:"parentId"`
+}
+
+type CategoryInfoResp {
+    Id int64 `json:"id"`
+    Name string `json:"name"`
+    Icon string `json:"icon"`
+    Sort int64 `json:"sort"`
+    Status int64 `json:"status"`
+    ParentId int64 `json:"parentId"`
+    CreatedAt int64 `json:"createdAt"`
+    Children []*CategoryInfoResp `json:"children"`
+}
+
+service Category Group Auth {
+    post add(UpsertCategoryReq) returns
+    get tree (CategoryListReq) returns (CommonListResp)
+    get list (CategoryListReq) returns (CommonListResp)
+    get info/:id returns (CategoryInfoResp)
+    put update/:id (UpsertCategoryReq) returns
+    delete delete/:id returns
+}
+
+# --------------------------- 标签管理 ---------------------------
+type TagListReq {
+    Page int64 `json:"page" form:"page"`
+    PageSize int64 `json:"pageSize" form:"pageSize"`
+    Name string `json:"name" form:"name"`
+    Status int64 `json:"status" form:"status"`
+}
+
+type UpsertTagReq {
+    Name string `json:"name"`
+    Sort int64 `json:"sort"`
+    Status int64 `json:"status"`
+}
+
+type TagInfoResp {
+    Id int64 `json:"id"`
+    Name string `json:"name"`
+    Sort int64 `json:"sort"`
+    Status int64 `json:"status"`
+    CreatedAt int64 `json:"createdAt"`
+}
+
+service Tag Group Auth {
+    post add(UpsertTagReq) returns
+    get list (TagListReq) returns (CommonListResp)
+    get info/:id returns (TagInfoResp)
+    put update/:id (UpsertTagReq) returns
+    delete delete/:id returns
+}
