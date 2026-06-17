@@ -103,23 +103,10 @@ func (self *ContentLogic) CategoryTree(ctx context.Context, params *dto.Category
 		items = append(items, item)
 	}
 
-	tree := self.buildCategoryTree(items, 0)
-	resp.Items = tree
-	resp.Total = int64(len(tree))
+	resp.Items = items
+	resp.Total = int64(len(items))
 
 	return
-}
-
-func (self *ContentLogic) buildCategoryTree(categories []*dto.CategoryInfoResp, parentId int64) []*dto.CategoryInfoResp {
-	var tree []*dto.CategoryInfoResp
-	for _, v := range categories {
-		if v.ParentId == parentId {
-			children := self.buildCategoryTree(categories, v.Id)
-			v.Children = children
-			tree = append(tree, v)
-		}
-	}
-	return tree
 }
 
 // @Summary CategoryInfo

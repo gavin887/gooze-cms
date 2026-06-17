@@ -35,6 +35,33 @@ CREATE TABLE `c_tags`  (
 ) ENGINE = InnoDB COMMENT = '标签管理';
 
 -- -----------------------------
+-- Ensure unique indexes exist for idempotency
+-- -----------------------------
+-- For sys_role_auths: ensure unique on (role_id, auth_id)
+SET @exist_idx := (SELECT COUNT(*) FROM information_schema.statistics 
+    WHERE table_schema = DATABASE() 
+    AND table_name = 'sys_role_auths' 
+    AND index_name = 'uk_role_auth');
+SET @sql := IF(@exist_idx = 0,
+    'ALTER TABLE `sys_role_auths` ADD UNIQUE KEY `uk_role_auth` (`role_id`, `auth_id`)',
+    'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- For sys_role_apis: ensure unique on (role_id, api_id)
+SET @exist_idx := (SELECT COUNT(*) FROM information_schema.statistics 
+    WHERE table_schema = DATABASE() 
+    AND table_name = 'sys_role_apis' 
+    AND index_name = 'uk_role_api');
+SET @sql := IF(@exist_idx = 0,
+    'ALTER TABLE `sys_role_apis` ADD UNIQUE KEY `uk_role_api` (`role_id`, `api_id`)',
+    'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- -----------------------------
 -- Insert default data for c_categories (幂等)
 -- -----------------------------
 INSERT INTO `c_categories` (`id`, `parent_id`, `name`, `icon`, `sort`, `status`, `created_at`, `updated_at`) VALUES
@@ -95,6 +122,8 @@ ON DUPLICATE KEY UPDATE
   `icon` = VALUES(`icon`),
   `sort` = VALUES(`sort`),
   `perm` = VALUES(`perm`),
+  `path` = VALUES(`path`),
+  `component` = VALUES(`component`),
   `updated_at` = NOW();
 
 -- 标签管理菜单
@@ -105,6 +134,8 @@ ON DUPLICATE KEY UPDATE
   `icon` = VALUES(`icon`),
   `sort` = VALUES(`sort`),
   `perm` = VALUES(`perm`),
+  `path` = VALUES(`path`),
+  `component` = VALUES(`component`),
   `updated_at` = NOW();
 
 -- 分类管理按钮权限
