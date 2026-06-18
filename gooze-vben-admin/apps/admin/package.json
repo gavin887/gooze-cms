@@ -8,7 +8,13 @@
     "build:analyze": "pnpm vite build --mode analyze",
     "dev": "pnpm vite --mode development",
     "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit --skipLibCheck"
+    "typecheck": "vue-tsc --noEmit --skipLibCheck",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:category": "playwright test category.spec.ts",
+    "test:e2e:tag": "playwright test tag.spec.ts",
+    "test:e2e:debug": "playwright test --debug"
   },
   "imports": {
     "#/*": "./src/*"
@@ -41,6 +47,7 @@
     "vue-toastification": "2.0.0-rc.5"
   },
   "devDependencies": {
+    "@playwright/test": "catalog:",
     "unplugin-element-plus": "catalog:"
   }
 }
